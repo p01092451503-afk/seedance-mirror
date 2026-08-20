@@ -59,6 +59,7 @@ export function aspectRatioToSize(aspectRatio?: string) {
 }
 
 export function getArkEndpointId() {
+  if (process.env["ARK_MODEL_TEST"]) return process.env["ARK_MODEL_TEST"];
   return process.env["ARK_ENDPOINT_ID"] || process.env["ARK_ENDPOINT"] || process.env["ARK_MODEL"] || "";
 }
 
@@ -93,7 +94,7 @@ export function makePayload({
     ? images.filter((img): img is string => typeof img === "string" && img.trim().length > 0)
     : [];
   return {
-    model: getArkEndpointId(),
+    model: (globalThis as unknown as { __arkModel?: string }).__arkModel || getArkEndpointId(),
     // 프롬프트는 어떠한 가공도 없이 그대로 전달한다.
     prompt,
     image: filteredImages,
