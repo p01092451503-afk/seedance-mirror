@@ -24,6 +24,39 @@ type Body = {
 
 const letters = "abcdefghijklmnopqrstuvwxyz";
 
+function toBase64(buf: ArrayBuffer) {
+  const bytes = new Uint8Array(buf);
+  let bin = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  }
+  return btoa(bin);
+}
+
+// Ark가 외부(서명) URL을 직접 내려받지 못하는 경우가 있어 서버에서 base64로 변환해 전달한다.
+async function inlineImages(images?: string[]) {
+  if (!Array.isArray(images) || images.length === 0) return [];
+  const out: string[] = [];
+  for (const img of images) {
+    if (typeof img !== "string" || !img.trim()) continue;
+    if (!/^https?:\/\//i.test(img)) {
+      out.push(img);
+      continue;
+    }
+    try {
+      const res = await fetch(img);
+      if (!res.ok) continue;
+      const type = res.headers.get("content-type") || "image/png";
+      const b64 = toBase64(await res.arrayBuffer());
+      out.push(`data:${type.split(";")[0]};base64,${b64}`);
+    } catch (e) {
+      console.error("reference image fetch failed", e);
+    }
+  }
+  return out;
+}
+
 async function saveHistory(args: {
   raw: unknown;
   body: Body;
