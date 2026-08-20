@@ -33,6 +33,24 @@ import {
   type LibEntry,
 } from "@/lib/library";
 
+// Seedream(Ark) 오류 코드를 한글 안내로 변환
+function explainSeedreamError(detail: string): string {
+  if (!detail) return "";
+  if (detail.includes("InputTextSensitiveContentDetected"))
+    return "프롬프트 문구가 Seedream 안전필터에 걸렸습니다. 노출/신체·연령·폭력 관련 표현(예: nude, bikini, lingerie, sexy, child, blood 등)이나 실존 인물명을 완곡한 표현으로 바꾼 뒤 다시 시도하세요. (프롬프트는 서버에서 가공하지 않고 그대로 전송됩니다)";
+  if (detail.includes("OutputImageSensitiveContentDetected"))
+    return "생성된 이미지가 안전필터에 걸렸습니다. 구도/의상 묘사를 완화하거나 시드를 바꿔 다시 시도하세요.";
+  if (detail.includes("Error while downloading"))
+    return "참조 이미지 다운로드에 실패했습니다. 이미지를 다시 업로드해 주세요.";
+  if (detail.includes("InvalidParameter")) return "요청 파라미터가 올바르지 않습니다. 비율/해상도 설정을 확인하세요.";
+  if (detail.includes("RateLimit") || detail.includes("429"))
+    return "요청이 몰려 제한되었습니다. 잠시 후 다시 시도하세요.";
+  if (detail.includes("Not Found")) return "모델(Endpoint) ID를 찾을 수 없습니다. API 설정을 확인하세요.";
+  return "";
+}
+
+
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
