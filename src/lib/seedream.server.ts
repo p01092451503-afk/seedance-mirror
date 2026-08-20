@@ -85,9 +85,9 @@ export function makePayload({
 }: {
   prompt: string;
   images?: unknown;
-  size?: string;
-  aspectRatio?: string;
-  watermark?: boolean;
+  size?: string | undefined;
+  aspectRatio?: string | undefined;
+  watermark?: boolean | undefined;
 }) {
   const filteredImages = Array.isArray(images)
     ? images.filter((img): img is string => typeof img === "string" && img.trim().length > 0)

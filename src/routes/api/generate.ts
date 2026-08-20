@@ -41,8 +41,10 @@ async function saveHistory(args: {
     const files: { path: string; filename: string }[] = [];
 
     for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      if (!url) continue;
       try {
-        const res = await fetch(urls[i]);
+        const res = await fetch(url);
         if (!res.ok) continue;
         const buf = await res.arrayBuffer();
         const filename = `V21_${workId}_${padded}${urls.length > 1 ? letters[i] || String(i) : ""}.png`;
