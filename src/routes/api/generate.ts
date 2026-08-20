@@ -92,7 +92,6 @@ export const Route = createFileRoute("/api/generate")({
             return Response.json({ ok: false, error: "Prompt is required." }, { status: 400 });
           }
 
-          if ((body as { modelTest?: string }).modelTest) (globalThis as unknown as { __arkModel?: string }).__arkModel = (body as { modelTest?: string }).modelTest;
           const payload = makePayload({
             prompt: body.prompt,
             images: body.images,
