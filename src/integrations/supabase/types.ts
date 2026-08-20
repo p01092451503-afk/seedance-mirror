@@ -14,13 +14,175 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      character_images: {
+        Row: {
+          character_id: string
+          created_at: string
+          filename: string
+          id: string
+          storage_path: string
+        }
+        Insert: {
+          character_id: string
+          created_at?: string
+          filename: string
+          id?: string
+          storage_path: string
+        }
+        Update: {
+          character_id?: string
+          created_at?: string
+          filename?: string
+          id?: string
+          storage_path?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "character_images_character_id_fkey"
+            columns: ["character_id"]
+            isOneToOne: false
+            referencedRelation: "characters"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      characters: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      generations: {
+        Row: {
+          api_size: string | null
+          aspect_ratio: string | null
+          batch_index: number
+          compiled_prompt: string | null
+          counter: number
+          created_at: string
+          final_prompt: string | null
+          id: string
+          input_image_count: number
+          log_data: Json | null
+          result_files: Json
+          sent_prompt: string | null
+          work_id: string
+        }
+        Insert: {
+          api_size?: string | null
+          aspect_ratio?: string | null
+          batch_index?: number
+          compiled_prompt?: string | null
+          counter: number
+          created_at?: string
+          final_prompt?: string | null
+          id?: string
+          input_image_count?: number
+          log_data?: Json | null
+          result_files?: Json
+          sent_prompt?: string | null
+          work_id: string
+        }
+        Update: {
+          api_size?: string | null
+          aspect_ratio?: string | null
+          batch_index?: number
+          compiled_prompt?: string | null
+          counter?: number
+          created_at?: string
+          final_prompt?: string | null
+          id?: string
+          input_image_count?: number
+          log_data?: Json | null
+          result_files?: Json
+          sent_prompt?: string | null
+          work_id?: string
+        }
+        Relationships: []
+      }
+      style_images: {
+        Row: {
+          created_at: string
+          filename: string
+          id: string
+          storage_path: string
+          style_id: string
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          id?: string
+          storage_path: string
+          style_id: string
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          id?: string
+          storage_path?: string
+          style_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "style_images_style_id_fkey"
+            columns: ["style_id"]
+            isOneToOne: false
+            referencedRelation: "styles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      styles: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      work_counters: {
+        Row: {
+          value: number
+          work_id: string
+        }
+        Insert: {
+          value?: number
+          work_id: string
+        }
+        Update: {
+          value?: number
+          work_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      next_work_counter: { Args: { _work_id: string }; Returns: number }
     }
     Enums: {
       [_ in never]: never
