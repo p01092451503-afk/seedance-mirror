@@ -298,7 +298,7 @@ export function buildPromptV21(work: WorkState, figureMap: Figure[], config: Pro
   }
 
   if (poseFig) {
-    const poseItem = find(config.PoseStrength, work.poseStrengthId);
+    const poseItem = find(config["PoseStrength"], work.poseStrengthId);
     if (poseItem) {
       const poseText = poseItem.prompt_text.replace(/Figure N/g, `Figure ${poseFig.figNo}`);
       if (work.poseStrengthId === "POS_004") warnings.push("WRN_002");
@@ -307,7 +307,7 @@ export function buildPromptV21(work: WorkState, figureMap: Figure[], config: Pro
   }
 
   if (bgFig) {
-    const bgItem = find(config.BgStrength, work.bgStrengthId);
+    const bgItem = find(config["BgStrength"], work.bgStrengthId);
     if (bgItem) {
       let bgText = bgItem.prompt_text.replace(/Figure N/g, `Figure ${bgFig.figNo}`);
       bgText = bgText.charAt(0).toUpperCase() + bgText.slice(1);
@@ -315,35 +315,35 @@ export function buildPromptV21(work: WorkState, figureMap: Figure[], config: Pro
     }
   }
 
-  const bodyItem = find(config.BodySource, work.bodySourceId);
+  const bodyItem = find(config["BodySource"], work.bodySourceId);
   if (bodyItem?.prompt_text) lines.push(bodyItem.prompt_text);
 
-  const camAngle = find(config.CameraAngle, work.cameraAngleId);
-  const camDist = find(config.CameraDistance, work.cameraDistanceId);
-  const camPos = find(config.CameraPosition, work.cameraPositionId);
+  const camAngle = find(config["CameraAngle"], work.cameraAngleId);
+  const camDist = find(config["CameraDistance"], work.cameraDistanceId);
+  const camPos = find(config["CameraPosition"], work.cameraPositionId);
   const camPosText = resolveFigureRoleText(camPos?.prompt_text || "", charA, charB);
   const camParts = [camAngle?.prompt_text, camDist?.prompt_text, camPosText].filter(Boolean);
   if (camParts.length) lines.push(camParts.join(" "));
 
-  const focusItem = find(config.FocusTarget, work.focusTargetId);
+  const focusItem = find(config["FocusTarget"], work.focusTargetId);
   if (focusItem?.prompt_text) lines.push(focusItem.prompt_text);
 
-  const bgStyleItem = find(config.BgStyle, work.bgStyleId);
+  const bgStyleItem = find(config["BgStyle"], work.bgStyleId);
   if (bgStyleItem?.prompt_text) lines.push(bgStyleItem.prompt_text);
 
-  const costumeItem = find(config.CostumeMode, work.costumeModeId);
+  const costumeItem = find(config["CostumeMode"], work.costumeModeId);
   if (costumeItem?.prompt_text) lines.push(costumeItem.prompt_text);
 
   if (work.actionText?.trim()) lines.push(work.actionText.trim());
 
   if (work.emotionId && work.emotionId !== "EMO_000") {
-    const emoItem = find(config.Emotion, work.emotionId);
+    const emoItem = find(config["Emotion"], work.emotionId);
     if (emoItem?.prompt_text) lines.push(emoItem.prompt_text);
   }
 
   if (work.directionMemo?.trim()) lines.push(work.directionMemo.trim());
 
-  const styleItem = find(config.StyleFinish, work.styleFinishId);
+  const styleItem = find(config["StyleFinish"], work.styleFinishId);
   lines.push(styleItem?.prompt_text || "Korean commercial webtoon style, clean line art, natural cel shading.");
 
   if (work.isPhotopose) warnings.push("WRN_005");
