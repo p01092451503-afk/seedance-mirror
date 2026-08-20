@@ -107,9 +107,7 @@ export function makePayload({
 }
 
 export async function callSeedream(payload: unknown) {
-  const url = getArkBaseUrl();
-  console.log("[seedream] POST", url);
-  const res = await fetch(url, {
+  const res = await fetch(getArkBaseUrl(), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
