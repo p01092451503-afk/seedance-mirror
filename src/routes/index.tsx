@@ -436,12 +436,15 @@ function Index() {
       } catch (err) {
         const e = err as Error & { status?: number; detail?: unknown };
         const status = e.status ? `HTTP ${e.status}` : "REQUEST_ERROR";
-        const detail = e.detail ? JSON.stringify(e.detail).slice(0, 800) : "";
-        const msg = `Batch ${i + 1} failed: ${status} / ${e.message}${detail ? ` / detail: ${detail}` : ""}`;
+        const detailRaw = e.detail ? JSON.stringify(e.detail) : "";
+        const detail = detailRaw.slice(0, 800);
+        const hint = explainSeedreamError(detailRaw);
+        const msg = `Batch ${i + 1} failed: ${status} / ${e.message}${hint ? `\n→ ${hint}` : ""}${detail ? ` / detail: ${detail}` : ""}`;
         console.error(msg);
         batchErrors.push(msg);
       }
     }
+
 
     if (timerRef.current) clearInterval(timerRef.current);
     const secs = Math.floor((Date.now() - start) / 1000);
