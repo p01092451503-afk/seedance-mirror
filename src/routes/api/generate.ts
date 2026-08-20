@@ -125,9 +125,11 @@ export const Route = createFileRoute("/api/generate")({
             return Response.json({ ok: false, error: "Prompt is required." }, { status: 400 });
           }
 
+          const inlined = await inlineImages(body.images);
+
           const payload = makePayload({
             prompt: body.prompt,
-            images: body.images,
+            images: inlined,
             size: body.size ?? "2K",
             aspectRatio: body.aspectRatio,
             watermark: body.watermark ?? false,
