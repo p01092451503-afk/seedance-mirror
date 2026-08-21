@@ -135,9 +135,20 @@ export const Route = createFileRoute("/api/generate")({
             watermark: body.watermark ?? false,
           });
 
+          // 디버그용: 실제 전송 JSON (이미지는 길이만 표기)
+          const debugPayload = {
+            ...payload,
+            image: payload.image.map((img, i) =>
+              img.startsWith("data:")
+                ? `<${img.slice(5, img.indexOf(";"))} base64 ${img.length} chars #${i + 1}>`
+                : img,
+            ),
+          };
+          console.log("[Seedream request JSON]", JSON.stringify(debugPayload, null, 2));
+
           const raw = await callSeedream(payload);
           const history = await saveHistory({ raw, body, apiSize: payload.size });
-          return Response.json({ ok: true, raw, history });
+          return Response.json({ ok: true, raw, history, request: debugPayload });
         } catch (err) {
           const e = err as Error & { status?: number; detail?: unknown };
           return Response.json(
